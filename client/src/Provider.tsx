@@ -6,6 +6,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 
   const [isJobs, setIsJobs] = useState<typeof jobsData>([]);
   const [isSearched, setIsSearched] = useState(false);
+  const [isShowRecruiterForm, setIsShowRecruiterForm] = useState(false);
   const [isSearchedFilter, setIsSearchedFilter] = useState({
     JobTitle: "",
     JobLocation: "",
@@ -23,7 +24,9 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     isSearched,
     setIsSearched,
     isJobs,
-    setIsJobs
+    setIsJobs,
+    isShowRecruiterForm,
+    setIsShowRecruiterForm 
   };
 
   return (

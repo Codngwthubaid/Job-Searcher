@@ -7,6 +7,8 @@ interface AppContextType {
   setIsSearchedFilter: (filter: { JobTitle: string; JobLocation: string }) => void;
   isJobs: any[];
   setIsJobs: (jobs: any[]) => void;
+  isShowRecruiterForm: boolean;
+  setIsShowRecruiterForm: (value: boolean) => void;
 }
 
 export const AppContextProvider = createContext<AppContextType | undefined>(undefined);

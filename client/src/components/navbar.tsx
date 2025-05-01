@@ -10,11 +10,24 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "./ui/sheet";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { useAppContext } from "@/Provider";
+import RecruiterLoginForm from "./recruiter-login-form";
+
+
 
 export default function Navbar() {
     const { openSignIn } = useClerk();
     const { user } = useUser();
     const navigate = useNavigate()
+    const { setIsShowRecruiterForm } = useAppContext()
 
     return (
         <div className="flex justify-between py-2 items-center mx-auto border shadow-md px-4">
@@ -35,7 +48,23 @@ export default function Navbar() {
                     </div>
                 ) : (
                     <div className="flex gap-3 items-center">
-                        <Button className="cursor-pointer">Recruiter Login</Button>
+                        <Dialog>
+                            <DialogTrigger>
+                                <Button
+                                    className="cursor-pointer"
+                                    onClick={() => setIsShowRecruiterForm(true)}
+                                >
+                                    Recruiter Login
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <RecruiterLoginForm />
+                                </DialogHeader>
+                            </DialogContent>
+                        </Dialog>
+
+
                         <Button onClick={() => openSignIn()} className="cursor-pointer">
                             Login
                         </Button>
@@ -71,9 +100,22 @@ export default function Navbar() {
                                 </>
                             ) : (
                                 <>
-                                    <Button className="w-full cursor-pointer">
-                                        Recruiter Login
-                                    </Button>
+                                    <Dialog>
+                                        <DialogTrigger>
+                                            <Button
+                                                className="cursor-pointer"
+                                                onClick={() => setIsShowRecruiterForm(true)}
+                                            >
+                                                Recruiter Login
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <RecruiterLoginForm />
+                                            </DialogHeader>
+                                        </DialogContent>
+                                    </Dialog>
+
                                     <Button
                                         onClick={() => openSignIn()}
                                         className="w-full cursor-pointer"

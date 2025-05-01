@@ -104,12 +104,12 @@ export default function Applications() {
                     <h2 className="text-2xl font-bold my-5">Applied Jobs</h2>
                     <Table className="w-full border border-gray-200 rounded-md shadow-sm overflow-hidden">
                         <TableHeader className="bg-blue-50">
-                            <TableRow>
-                                <TableHead className="w-[150px] text-gray-700 text-sm font-semibold px-4 py-3">Company</TableHead>
-                                <TableHead className="text-gray-700 text-sm font-semibold px-4 py-3">Job Title</TableHead>
-                                <TableHead className="text-gray-700 text-sm font-semibold px-4 py-3 max-sm:hidden">Location</TableHead>
-                                <TableHead className="text-gray-700 text-sm font-semibold px-4 py-3 max-sm:hidden">Date</TableHead>
-                                <TableHead className="text-right text-gray-700 text-sm font-semibold px-4 py-3">Status</TableHead>
+                            <TableRow className="">
+                                <TableHead className="w-[150px] text-gray-700 text-xl font-semibold px-4 py-3">Company</TableHead>
+                                <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3">Job Title</TableHead>
+                                <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3 max-sm:hidden">Location</TableHead>
+                                <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3 max-sm:hidden">Date</TableHead>
+                                <TableHead className="text-right text-gray-700 text-xl font-semibold px-4 py-3">Status</TableHead>
                             </TableRow>
                         </TableHeader>
 
@@ -119,11 +119,16 @@ export default function Applications() {
                                     key={job.company}
                                     className="hover:bg-blue-50 transition-colors duration-200"
                                 >
-                                    <TableCell className="px-4 py-3 font-medium text-gray-800">{job.company}</TableCell>
+                                    <TableCell className="px-4 py-3 font-medium text-gray-800">
+                                        <div className="flex items-center gap-x-2">
+                                        {job.logo && <img src={job.logo} alt={job.company} className="w-8 h-8 rounded-full" />}
+                                        {job.company && <p className="text-base font-bold">{job.company}</p>}
+                                        </div>
+                                    </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-700">{job.title}</TableCell>
                                     <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job.location}</TableCell>
                                     <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job.date}</TableCell>
-                                    <TableCell className="px-4 py-3 text-right text-gray-700">{job.status}</TableCell>
+                                    <TableCell className={`px-4 py-3 text-right text-gray-700 ${job.status === "Pending" ? "text-blue-600" : job.status === "Rejected" ? "text-red-600" : job.status === "Accepted" && "text-green-600"}`}>{job.status}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
