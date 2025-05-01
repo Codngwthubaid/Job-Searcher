@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import logo from "@/assets/logo.gif";
 import { UserButton, useClerk, useUser } from "@clerk/clerk-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import {
     Sheet,
@@ -14,20 +14,19 @@ import {
 export default function Navbar() {
     const { openSignIn } = useClerk();
     const { user } = useUser();
+    const navigate = useNavigate()
 
     return (
         <div className="flex justify-between py-2 items-center mx-auto border shadow-md px-4">
-            {/* Logo Section */}
-            <div className="flex gap-1 items-center">
+            <div onClick={() => navigate("/")} className="flex gap-1 items-center cursor-pointer">
                 <img src={logo} alt="logo" className="w-16 md:w-20" />
                 <div className="text-xl md:text-3xl font-bold">Job Searcher</div>
             </div>
 
-            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center mx-5">
                 {user ? (
                     <div className="flex gap-2 items-center">
-                        <Link to="/applied-jobs">
+                        <Link to="/applications">
                             <Button className="cursor-pointer">Applied Jobs</Button>
                         </Link>
                         <p className="text-gray-500">|</p>
@@ -44,7 +43,6 @@ export default function Navbar() {
                 )}
             </div>
 
-            {/* Mobile Navigation - Sheet Trigger */}
             <div className="md:hidden">
                 <Sheet>
                     <SheetTrigger asChild>

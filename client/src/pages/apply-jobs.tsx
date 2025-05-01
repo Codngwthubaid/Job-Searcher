@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import logo from "@/assets/logo.gif";
 import { Button } from "@/components/ui/button";
-import { CircleDollarSign, CircleUserRound, LocationEditIcon, ShoppingBag } from "lucide-react";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { CircleDollarSign, CircleUserRound, LocationEditIcon, ShoppingBag } from "lucide-react";
+import { AuroraText } from "@/components/magicui/aurora-text";
 
 export interface JobData {
     _id: string;
@@ -26,7 +28,7 @@ export interface JobData {
 
 export default function AppliedJobs() {
     const { id } = useParams();
-
+    const navigate = useNavigate();
     const [jobData, setJobData] = useState<JobData | null>(null);
     const { isJobs } = useAppContext();
 
@@ -50,54 +52,101 @@ export default function AppliedJobs() {
                     <p className="text-xl font-bold">Fetching data please wait ...</p>
                 </div>
             ) : (
-                <div className="mx-10">
-                    <div className="border rounded-lg shadow-md flex justify-between items-center p-5 my-5 h-44">
-                        <div className="flex gap-3 items-center">
-                            <img src={jobData?.companyId?.image} alt="company-logo" className="w-32 border shadow-md rounded-full p-2" />
-                            <div className="flex flex-col gap-y-3">
-                                <div className="font-bold text-3xl">{jobData.title}</div>
-                                <div className="flex items-center gap-x-5">
-                                    <div className="flex gap-x-1 items-center"><ShoppingBag className="size-5" />{jobData.companyId.name}</div>
-                                    <div className="flex gap-x-1 items-center"><LocationEditIcon className="size-5" />{jobData.location}</div>
-                                    <div className="flex gap-x-1 items-center"><CircleUserRound className="size-5" />{jobData.level}</div>
-                                    <div className="flex gap-x-1 items-center"><CircleDollarSign className="size-5" /> {jobData.salary}</div>
+                <div className="mx-4 sm:mx-6 md:mx-10">
+                    <div className="border rounded-lg shadow-md flex flex-col lg:flex-row justify-between items-center p-5 my-5">
+                        <div className="flex flex-col sm:flex-row gap-4 items-center w-full lg:w-3/4">
+                            <img
+                                src={jobData?.companyId?.image}
+                                alt="company-logo"
+                                className="w-24 sm:w-32 border shadow-md rounded-full p-2"
+                            />
+                            <div className="flex flex-col gap-y-3 w-full">
+                                <AuroraText className="font-bold text-2xl sm:text-3xl">
+                                    {jobData.title}
+                                </AuroraText>
+                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:text-base">
+                                    <div className="flex gap-1 items-center">
+                                        <ShoppingBag className="size-4 sm:size-5" />
+                                        {jobData.companyId.name}
+                                    </div>
+                                    <div className="flex gap-1 items-center">
+                                        <LocationEditIcon className="size-4 sm:size-5" />
+                                        {jobData.location}
+                                    </div>
+                                    <div className="flex gap-1 items-center">
+                                        <CircleUserRound className="size-4 sm:size-5" />
+                                        {jobData.level}
+                                    </div>
+                                    <div className="flex gap-1 items-center">
+                                        <CircleDollarSign className="size-4 sm:size-5" />
+                                        {jobData.salary}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="flex flex-col gap-y-3 items-center">
-                            <p>Posted {moment(jobData.date).fromNow()}</p>
+                        <div className="flex flex-col gap-y-3 items-center mt-4 lg:mt-0">
+                            <p className="text-sm sm:text-base">Posted {moment(jobData.date).fromNow()}</p>
                             <Button className="cursor-pointer">Apply Now</Button>
                         </div>
                     </div>
 
-
-                    <div className="flex w-full justify-between items-start gap-3">
-                        <div className="w-[70%]">
-                            <h2 className="mt-8 mb-4 font-bold ml-4 text-xl text-[#222] w-[97%] border-b-2 border-gray-300 pb-2">Job Description</h2>
-                            <div className="description-container " dangerouslySetInnerHTML={{ __html: jobData.description }} />
-                            <Button className="cursor-pointer px-10 py-6 text-base">Apply Now</Button>
+                    <div className="flex flex-col lg:flex-row w-full justify-between items-start gap-6">
+                        <div className="w-full lg:w-[70%]">
+                            <h2 className="mt-8 mb-4 font-bold text-xl text-[#222] border-b-2 border-gray-300 pb-2">
+                                Job Description
+                            </h2>
+                            <div className="description-container" dangerouslySetInnerHTML={{ __html: jobData.description }} />
+                            <Button className="cursor-pointer px-10 py-6 text-base mt-4">Apply Now</Button>
                         </div>
-                        <div className="w-[30%]">
-                            <h2>More Jobs from {jobData.companyId.name}</h2>
-                            {isJobs.filter((job) => job.companyId.name === jobData.companyId.name).map((job) => (
-                                <div key={job._id} className="border rounded-lg shadow-md flex justify-between items-center p-5 my-5 h-44">
-                                    <div className="flex gap-3 items-center">
-                                        <img src={job.companyId.image} alt="company-logo" className="w-32 border shadow-md rounded-full p-2" />
-                                        <div className="flex flex-col gap-y-3">
-                                            <div className="font-bold text-3xl">{job.title}</div>
-                                            <div className="flex items-center gap-x-5">
-                                                <div className="flex gap-x-1 items-center"><ShoppingBag className="size-5" />{job.companyId.name}</div>
-                                                <div className="flex gap-x-1 items-center"><LocationEditIcon className="size-5" />{job.location}</div>
-                                                <div className="flex gap-x-1 items-center"><CircleUserRound className="size-5" />{job.level}</div>
-                                                <div className="flex gap-x-1 items-center"><CircleDollarSign className="size-5" /> {job.salary}</div>
+
+                        <div className="w-full lg:w-[30%]">
+                            <h2 className="mt-8 mb-4 font-bold text-xl text-[#222] border-b-2 border-gray-300 pb-2">
+                                More jobs from <AuroraText>{jobData.companyId.name}</AuroraText>
+                            </h2>
+                            {isJobs
+                                .filter((job) => job.companyId.name === jobData.companyId.name && job._id !== id)
+                                .slice(0, 3)
+                                .map((job) => (
+                                    <div
+                                        key={job._id}
+                                        className="border my-5 flex flex-col justify-between rounded-lg p-4 shadow-sm hover:shadow-md transition"
+                                    >
+                                        <div className="flex flex-col mb-3">
+                                            <div className="flex items-center gap-x-3">
+                                                <img
+                                                    className="w-8 h-8 rounded-full object-cover"
+                                                    alt=""
+                                                    src={job.companyId.image}
+                                                />
+                                                <h2 className="text-lg font-semibold">{job.title}</h2>
+                                            </div>
+                                            <div className="flex flex-wrap gap-2 mt-2">
+                                                <p className="text-sm border p-1 font-medium text-muted-foreground">{job.location}</p>
+                                                <p className="text-sm border p-1 font-medium text-muted-foreground">{job.level}</p>
                                             </div>
                                         </div>
+                                        <p
+                                            className="text-sm mb-2"
+                                            dangerouslySetInnerHTML={{ __html: job.description.slice(0, 200) }}
+                                        />
+                                        <div className="flex flex-wrap gap-2 justify-between items-center mt-3">
+                                            <Button onClick={() => navigate(`/applied-jobs/${job._id}`)} className="cursor-pointer">
+                                                Apply Now
+                                            </Button>
+                                            <Button
+                                                onClick={() => navigate(`/applied-jobs/${job._id}`)}
+                                                variant="link"
+                                                className="text-blue-500 cursor-pointer"
+                                            >
+                                                Learn More
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
                         </div>
                     </div>
                 </div>
+
             )}
         </>
     );
