@@ -133,7 +133,7 @@ export default function HeroSection() {
                 </div>
             </div>
 
-            <div className="w-[90%] md:w-[80%] mx-auto h-32 md:h-40 rounded-lg shadow-md my-5 flex flex-col md:flex-row justify-center items-center gap-3 md:gap-x-3">
+            <div className="w-[90%] md:w-[80%] mx-auto h-32 rounded-lg shadow-md my-5 flex flex-col md:flex-row justify-center items-center gap-3 md:gap-x-3">
                 <div className="mx-2 md:mx-5 px-2 md:px-5 font-bold text-lg md:text-xl">
                     <AuroraText>Trusted By</AuroraText>
                 </div>

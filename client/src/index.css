@@ -162,3 +162,35 @@ html , body {
 ::-webkit-scrollbar {
   display: none;
 }
+
+
+.description-container {
+  font-family: monospace !important;
+  color: #333;
+  line-height: 1.6;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.description-container p {
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+.description-container h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  color: #222;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.5rem;
+}
+
+.description-container ol {
+  padding-left: 1.5rem;
+}
+
+.description-container ol li {
+  margin-bottom: 0.75rem;
+  list-style-type: disc;
+}
