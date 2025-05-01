@@ -1,35 +1,93 @@
 import { Button } from "./ui/button";
-import logo from "@/assets/logo.gif"
-import { UserButton, useClerk, useUser } from "@clerk/clerk-react"
+import logo from "@/assets/logo.gif";
+import { UserButton, useClerk, useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
+import { Menu } from "lucide-react";
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "./ui/sheet";
 
 export default function Navbar() {
-
-    const { openSignIn } = useClerk()
-    const { user } = useUser()
+    const { openSignIn } = useClerk();
+    const { user } = useUser();
 
     return (
-        <div className="flex justify-between py-2 items-center mx-auto border shadow-md">
+        <div className="flex justify-between py-2 items-center mx-auto border shadow-md px-4">
+            {/* Logo Section */}
             <div className="flex gap-1 items-center">
-                <img src={logo} alt="logo" className="w-20" />
-                <div className="text-3xl font-bold">Job Searcher</div>
+                <img src={logo} alt="logo" className="w-16 md:w-20" />
+                <div className="text-xl md:text-3xl font-bold">Job Searcher</div>
             </div>
-            {
-                user ?
-                    <div className="mx-5 flex gap-2 items-center ">
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center mx-5">
+                {user ? (
+                    <div className="flex gap-2 items-center">
                         <Link to="/applied-jobs">
                             <Button className="cursor-pointer">Applied Jobs</Button>
                         </Link>
-                        <p>|</p>
+                        <p className="text-gray-500">|</p>
                         <p>Hi, {user.firstName + " " + user.lastName}</p>
                         <UserButton />
                     </div>
-                    :
-                    <div className="flex gap-3 items-center mx-5">
-                        <Button className="cursor-pointer">Recuiter Login</Button>
-                        <Button onClick={e => openSignIn()} className="cursor-pointer">Login</Button>
+                ) : (
+                    <div className="flex gap-3 items-center">
+                        <Button className="cursor-pointer">Recruiter Login</Button>
+                        <Button onClick={() => openSignIn()} className="cursor-pointer">
+                            Login
+                        </Button>
                     </div>
-            }
+                )}
+            </div>
+
+            {/* Mobile Navigation - Sheet Trigger */}
+            <div className="md:hidden">
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button variant="outline" size="icon">
+                            <Menu className="h-6 w-6" />
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-[250px] sm:w-[300px]">
+                        <SheetHeader>
+                            <SheetTitle>Menu</SheetTitle>
+                        </SheetHeader>
+                        <div className="flex flex-col gap-4 mt-6">
+                            {user ? (
+                                <>
+                                    <p className="text-lg">
+                                        Hi, {user.firstName + " " + user.lastName}
+                                    </p>
+                                    <Link to="/applied-jobs">
+                                        <Button className="w-full cursor-pointer">
+                                            Applied Jobs
+                                        </Button>
+                                    </Link>
+                                    <div className="flex justify-center">
+                                        <UserButton />
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <Button className="w-full cursor-pointer">
+                                        Recruiter Login
+                                    </Button>
+                                    <Button
+                                        onClick={() => openSignIn()}
+                                        className="w-full cursor-pointer"
+                                    >
+                                        Login
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
         </div>
-    )
+    );
 }

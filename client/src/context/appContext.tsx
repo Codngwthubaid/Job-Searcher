@@ -5,6 +5,8 @@ interface AppContextType {
   setIsSearched: (value: boolean) => void;
   isSearchedFilter: { JobTitle: string; JobLocation: string };
   setIsSearchedFilter: (filter: { JobTitle: string; JobLocation: string }) => void;
+  isJobs: any[];
+  setIsJobs: (jobs: any[]) => void;
 }
 
 export const AppContextProvider = createContext<AppContextType | undefined>(undefined);
