@@ -5,8 +5,6 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import './index.css'
 import App from './App.tsx'
 import Provider from './Provider.tsx'
-import Navbar from './components/navbar.tsx'
-import Footer from './components/footer.tsx'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -18,9 +16,7 @@ createRoot(document.getElementById('root')!).render(
   <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
     <BrowserRouter>
       <Provider>
-        <Navbar />
         <App />
-        <Footer />
       </Provider>
     </BrowserRouter>
   </ClerkProvider>

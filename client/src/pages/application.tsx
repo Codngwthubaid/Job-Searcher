@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input";
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
 import { jobsApplied } from "@/constants";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 export default function Applications() {
     const [isLoading, setIsLoading] = useState(false);
@@ -55,6 +55,7 @@ export default function Applications() {
 
     return (
         <>
+            <Navbar />
             {isLoading ? (
                 <div className="flex flex-col justify-center items-center w-full h-[80vh]">
                     <img src={logo} alt="logo-loading" className="w-20" />
@@ -121,8 +122,8 @@ export default function Applications() {
                                 >
                                     <TableCell className="px-4 py-3 font-medium text-gray-800">
                                         <div className="flex items-center gap-x-2">
-                                        {job.logo && <img src={job.logo} alt={job.company} className="w-8 h-8 rounded-full" />}
-                                        {job.company && <p className="text-base font-bold">{job.company}</p>}
+                                            {job.logo && <img src={job.logo} alt={job.company} className="w-8 h-8 rounded-full" />}
+                                            {job.company && <p className="text-base font-bold">{job.company}</p>}
                                         </div>
                                     </TableCell>
                                     <TableCell className="px-4 py-3 text-gray-700">{job.title}</TableCell>
@@ -136,6 +137,7 @@ export default function Applications() {
 
                 </div>
             )}
+            <Footer />
         </>
     );
 }

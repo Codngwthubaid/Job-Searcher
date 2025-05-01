@@ -7,6 +7,8 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { CircleDollarSign, CircleUserRound, LocationEditIcon, ShoppingBag } from "lucide-react";
 import { AuroraText } from "@/components/magicui/aurora-text";
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 
 export interface JobData {
     _id: string;
@@ -46,6 +48,7 @@ export default function AppliedJobs() {
 
     return (
         <>
+            <Navbar />
             {!jobData ? (
                 <div className="flex flex-col justify-center items-center w-full h-full">
                     <img src={logo} alt="logo-loading" className="w-20" />
@@ -146,8 +149,8 @@ export default function AppliedJobs() {
                         </div>
                     </div>
                 </div>
-
             )}
+            <Footer />
         </>
     );
 }
