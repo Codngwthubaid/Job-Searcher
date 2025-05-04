@@ -794,8 +794,6 @@ export const jobsData = [
 ];
 
 
-
-
 export const jobsApplied = [
     {
         company: 'Amazon',
@@ -837,4 +835,23 @@ export const jobsApplied = [
         status: 'Accepted',
         logo: google,
     },
+];
+
+
+export const viewApplicationsPageData = [
+    { _id: 1, name: "Richard Sanford", jobTitle: "Full Stack Developer", location: "Bangalore", imgSrc: apple },
+    { _id: 2, name: "Enrique Murphy", jobTitle: "Data Scientist", location: "San Francisco", imgSrc: apple },
+    { _id: 3, name: "Alison Powell", jobTitle: "Marketing Manager", location: "London", imgSrc: apple },
+    { _id: 4, name: "Richard Sanford", jobTitle: "UI/UX Designer", location: "Dubai", imgSrc: apple },
+    { _id: 5, name: "Enrique Murphy", jobTitle: "Full Stack Developer", location: "Hyderabad", imgSrc: apple },
+    { _id: 6, name: "Alison Powell", jobTitle: "Data Scientist", location: "New Delhi", imgSrc: apple },
+    { _id: 7, name: "Richard Sanford", jobTitle: "Marketing Manager", location: "Chennai", imgSrc: apple },
+];
+
+
+export const manageJobsData = [
+    { _id: 1, title: "Full Stack Developer", date: 1729102298497, location: "Bangalore", applicants: 20 },
+    { _id: 2, title: "Data Scientist", date: 1729102298497, location: "San Francisco", applicants: 15 },
+    { _id: 3, title: "Marketing Manager", date: 1729102298497, location: "London", applicants: 2 },
+    { _id: 4, title: "UI/UX Designer", date: 1729102298497, location: "Dubai", applicants: 25 }
 ];

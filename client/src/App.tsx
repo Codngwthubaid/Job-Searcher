@@ -6,6 +6,8 @@ import RecruiterDashboard from "./pages/recruiter-dashboard";
 import ViewApplications from "./pages/view-applications";
 import ManageJobs from "./pages/manage-jobs";
 import AddJobs from "./pages/add-jobs";
+import "quill/dist/quill.snow.css";
+
 export default function App() {
 
   return (
