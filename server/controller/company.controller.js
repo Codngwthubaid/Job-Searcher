@@ -49,7 +49,35 @@ export const registerCompany = async (req, res) => {
     }
 }
 
-export const loginCompany = async (req, res) => { }
+export const loginCompany = async (req, res) => {
+
+    try {
+
+        const { email, password } = req.body
+        if (!email || !password) { return res.status(400).json({ message: "Please fill all the fields", success: false }) }
+
+        const company = await Company.findOne({ email })
+
+        if (bcrypt.compare(password, company.password)) {
+            res.status(200).json({
+                message: "Company logged in successfully",
+                success: true,
+                company: {
+                    _id: company._id,
+                    name: company.name,
+                    email: company.email,
+                    image: company.image
+                },
+                token: generateToken(company._id)
+            })
+        } else {
+            res.status(400).json({ message: "Invalid email or password", success: false })
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ message: error.message, success: false })
+    }
+}
 
 export const getCompanyData = async (req, res) => { }
 
