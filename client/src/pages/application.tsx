@@ -11,15 +11,53 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { jobsApplied } from "@/constants";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { useAppContext } from "@/Provider"
+import { useAuth, useUser } from "@clerk/clerk-react"
+import { toast } from "sonner";
+import axios from "axios";
+
 
 export default function Applications() {
     const [isLoading, setIsLoading] = useState(false);
     const [resume, setResume] = useState<File | null>(null);
     const [isSaved, setIsSaved] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+
+    const { user } = useUser()
+    const { getToken } = useAuth()
+
+    const { userData, backendUrl, userApplications, fetchUserData } = useAppContext()
+    console.log("User Applications:",userApplications)
+
+    const updateResume = async () => {
+        try {
+
+            const token = await getToken()
+            const formData = new FormData();
+            formData.append("resume", resume!);
+            const { data } = await axios.post(backendUrl + "/users/updateResume", formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (data.success) {
+                toast.success(data.message)
+                await fetchUserData()
+            } else {
+                toast.error(data.message)
+            }
+
+        } catch (error: any) {
+            console.log(error)
+            toast.error(error)
+        }
+
+        setResume(null);
+        setIsSaved(false);
+    }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -49,8 +87,16 @@ export default function Applications() {
         }
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if (!resume) {
+            toast.error("No resume selected");
+            return;
+        }
+
+        setIsLoading(true);
+        await updateResume();
         setIsSaved(true);
+        setIsLoading(false);
     };
 
     return (
@@ -86,9 +132,10 @@ export default function Applications() {
                                 <Button onClick={triggerFileInput} variant="secondary" className="cursor-pointer">
                                     Reselect
                                 </Button>
-                                <Button onClick={handleSave} variant="outline" className="cursor-pointer">
-                                    {isSaved ? "Resume Saved ✅" : "Save Resume"}
+                                <Button onClick={handleSave} variant="outline" className="cursor-pointer" disabled={isLoading}>
+                                    {isLoading ? "Saving..." : isSaved ? "Resume Saved ✅" : "Save Resume"}
                                 </Button>
+
                             </div>
                         </div>
                     )}
@@ -115,21 +162,21 @@ export default function Applications() {
                         </TableHeader>
 
                         <TableBody>
-                            {jobsApplied.map((job) => (
+                            {userApplications.map((job: any, index: number) => (
                                 <TableRow
-                                    key={job.company}
+                                    key={index}
                                     className="hover:bg-blue-50 transition-colors duration-200"
                                 >
                                     <TableCell className="px-4 py-3 font-medium text-gray-800">
                                         <div className="flex items-center gap-x-2">
-                                            {job.logo && <img src={job.logo} alt={job.company} className="w-8 h-8 rounded-full" />}
-                                            {job.company && <p className="text-base font-bold">{job.company}</p>}
+                                            {job?.companyId?.image && <img src={job.companyId.image} alt={job.companyId.name} className="w-8 h-8 rounded-full" />}
+                                            {job?.companyId?.name && <p className="text-base font-bold">{job.companyId.name}</p>}
                                         </div>
                                     </TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-700">{job.title}</TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job.location}</TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job.date}</TableCell>
-                                    <TableCell className={`px-4 py-3 text-right text-gray-700 ${job.status === "Pending" ? "text-blue-600" : job.status === "Rejected" ? "text-red-600" : job.status === "Accepted" && "text-green-600"}`}>{job.status}</TableCell>
+                                    <TableCell className="px-4 py-3 text-gray-700">{job?.jobId?.title}</TableCell>
+                                    <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job?.jobId?.location}</TableCell>
+                                    <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job?.date}</TableCell>
+                                    <TableCell className={`px-4 py-3 text-right text-gray-700 ${job?.status === "Pending" ? "text-blue-600" : job?.status === "Rejected" ? "text-red-600" : job?.status === "Accepted" && "text-green-600"}`}>{job?.status}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

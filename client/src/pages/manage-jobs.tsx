@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { manageJobsData } from "@/constants"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 import { useAppContext } from "@/Provider"
@@ -20,7 +19,9 @@ import { toast } from "sonner"
 
 export default function ManageJobs() {
 
-    const { backendUrl, companyToken } = useAppContext()
+    const { backendUrl, companyToken} = useAppContext()
+
+
     interface Job {
         _id: string;
         title: string;

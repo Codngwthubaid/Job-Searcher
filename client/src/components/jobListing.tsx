@@ -2,7 +2,7 @@ import { useAppContext } from "@/Provider";
 import { Button } from "./ui/button";
 import { MdOutlineCancel } from "react-icons/md";
 import { AuroraText } from "./magicui/aurora-text";
-import { JobCategories, JobLocations } from "@/constants";
+import { JobCategories, JobLocations } from "@/constants/index";
 import { useEffect, useState } from "react";
 import {
     Pagination,
@@ -184,8 +184,8 @@ export default function JobListing() {
                                                 <h2 className="text-xl font-semibold">{job.title}</h2>
                                             </div>
                                             <div className="flex gap-2 w-full">
-                                                <p className="text-sm border p-1 font-medium text-muted-foreground">{job.location}</p>
-                                                <p className="text-sm border p-1 font-medium text-muted-foreground">{job.level}</p>
+                                                <p className="text-sm border rounded-lg p-1 m-1 font-medium text-muted-foreground">{job.location}</p>
+                                                <p className="text-sm border rounded-lg p-1 m-1 font-medium text-muted-foreground">{job.level}</p>
                                             </div>
                                         </div>
                                     </div>

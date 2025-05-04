@@ -14,6 +14,14 @@ interface AppContextType {
   setCompanyToken: (token: any) => void;
   companyData: any;
   setCompanyData: (data: any) => void;
+  userData: any;
+  setUserData: (data: any) => void;
+  userApplications: string[];
+  setUserApplications: (data: string[]) => void;
+  fetchJobsData: () => Promise<void>;
+  fetchUserData: () => Promise<void>;
+  fetchCompanyData: () => Promise<void>;
+  fetchUserJobApplicationsData: () => Promise<void>;
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);

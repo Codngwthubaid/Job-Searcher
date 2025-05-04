@@ -33,7 +33,7 @@ export const getUserAppliedForJobsData = async (req, res) => {
         const userId = req.auth.userId
 
         const isAllreadyApplied = await JobApplication.findOne({ userId, jobId })
-        if (isAllreadyApplied.length > 0) return res.json({ success: false, message: "You have already applied for this job" })
+        if (isAllreadyApplied) return res.json({ success: false, message: "You have already applied for this job" })
         else {
             const job = await Job.findById(jobId)
             if (!job) return res.json({ success: false, message: "Job not found" })
@@ -64,7 +64,6 @@ export const getUserAppliedForJobsData = async (req, res) => {
 export const getUserJobApplicationsData = async (req, res) => {
 
     try {
-
         const userId = req.auth.userId
         const jobApplications = await JobApplication.find({ userId })
             .populate("companyId", "email name image")
@@ -79,18 +78,19 @@ export const getUserJobApplicationsData = async (req, res) => {
         console.log(error)
         res.json({ success: false, message: error.message })
     }
-
 }
+
+
 
 export const updateUserResume = async (req, res) => {
 
     try {
         const userId = req.auth.userId
-        const resumeFile = req.resumeFile
+        const resumeFile = req.file
         const user = await User.findById(userId)
         if (!user) return res.json({ success: false, message: "User not found" })
         else {
-            const resumeUploadOnCloudinary = await cloudinary.uploader.upload(resumeFile)
+            const resumeUploadOnCloudinary = await cloudinary.uploader.upload(resumeFile.path)
             user.resume = resumeUploadOnCloudinary.secure_url
             await user.save()
             res.json({ success: true, message: "Successfully uploaded resume", user })

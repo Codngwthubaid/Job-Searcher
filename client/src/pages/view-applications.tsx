@@ -17,8 +17,10 @@ import { viewApplicationsPageData } from "@/constants/index"
 import { Download } from "lucide-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
-
 export default function ViewApplications() {
+
+
+
     return (
 
         <div className="w-full">

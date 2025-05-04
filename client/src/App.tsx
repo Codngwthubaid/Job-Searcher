@@ -8,6 +8,7 @@ import ManageJobs from "./pages/manage-jobs";
 import AddJobs from "./pages/add-jobs";
 import "quill/dist/quill.snow.css";
 import { useAppContext } from "./Provider";
+import NotFound from "./pages/not-found";
 
 export default function App() {
 
@@ -20,17 +21,17 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/applied-jobs/:id" element={<AppliedJobs />} />
         <Route path={"/applications"} element={<Applications />} />
-        <Route path={"/dashboard"} element={<RecruiterDashboard />}>
-          {
-            companyToken && (
-              <>
-                <Route path={"view-applications"} element={<ViewApplications />} />
-                <Route path={"manage-job"} element={<ManageJobs />} />
-                <Route path={"add-job"} element={<AddJobs />} />
-              </>
-            )
-          }
-        </Route>
+        {
+          companyToken ? (
+            <Route path={"/dashboard"} element={<RecruiterDashboard />}>
+              <Route path={"view-applications"} element={<ViewApplications />} />
+              <Route path={"manage-job"} element={<ManageJobs />} />
+              <Route path={"add-job"} element={<AddJobs />} />
+            </Route>
+          ) : (
+            <Route path="*" element={<NotFound />} />
+          )
+        }
       </Routes>
     </div>
   )

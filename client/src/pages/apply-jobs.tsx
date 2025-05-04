@@ -9,6 +9,9 @@ import { CircleDollarSign, CircleUserRound, LocationEditIcon, ShoppingBag } from
 import { AuroraText } from "@/components/magicui/aurora-text";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import { toast } from "sonner";
+import axios from "axios";
+import { useAuth } from "@clerk/clerk-react";
 
 export interface JobData {
     _id: string;
@@ -30,21 +33,79 @@ export interface JobData {
 
 export default function AppliedJobs() {
     const { id } = useParams();
+    const { getToken } = useAuth()
     const navigate = useNavigate();
     const [jobData, setJobData] = useState<JobData | null>(null);
-    const { isJobs } = useAppContext();
+    const [isAllreadyApplied, setIsAllreadyApplied] = useState(false);
+    const { isJobs, backendUrl, userData, userApplications, fetchUserJobApplicationsData } = useAppContext();
+
+
+    const fetchJobDataById = async () => {
+        try {
+
+            const { data } = await axios.get(backendUrl + `/jobs/${id}`)
+            if (data.success) {
+                setJobData(data.job)
+                toast.success(data.message)
+                console.log(data)
+            }
+            else {
+                toast.error(data.message)
+            }
+
+
+        } catch (error: any) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
+
+    const applyHandler = async () => {
+        try {
+
+            if (!userData) return toast.error("Please login first");
+            navigate("/applications")
+            if (!userData.resume) return toast.error("Please upload your resume first");
+
+            const token = await getToken()
+            const { data } = await axios.post(backendUrl + `/users/applyForJob`,
+                { jobId: jobData?._id },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+            if (data.success) {
+                toast.success(data.message)
+                fetchUserJobApplicationsData()
+                console.log(data)
+            }
+            else {
+                toast.error(data.message)
+            }
+
+
+
+        } catch (error: any) {
+            console.log(error)
+            toast.error(error)
+        }
+    }
+
+    const checkAllreadyApplied = () => {
+        const hasApplied = userApplications.some((id) => id === jobData?._id);
+        setIsAllreadyApplied(hasApplied);
+    }
 
     useEffect(() => {
-        if (id && isJobs.length > 0) {
-            const job = isJobs.find((job) => job._id === id);
-            if (job) {
-                setJobData(job);
-                console.log("Job found:", job);
-            } else {
-                console.warn("No job found for ID:", id);
-            }
-        }
-    }, [id, isJobs]);
+        if (userApplications.length > 0 && jobData) checkAllreadyApplied()
+    }, [userApplications, jobData, id]);
+
+
+    useEffect(() => {
+        fetchJobDataById()
+    }, [id]);
 
     return (
         <>
@@ -61,7 +122,7 @@ export default function AppliedJobs() {
                             <img
                                 src={jobData?.companyId?.image}
                                 alt="company-logo"
-                                className="w-24 sm:w-32 border shadow-md rounded-full p-2"
+                                className="size-20 sm:size-28 border shadow-md rounded-full p-2"
                             />
                             <div className="flex flex-col gap-y-3 w-full">
                                 <AuroraText className="font-bold text-2xl sm:text-3xl">
@@ -89,7 +150,9 @@ export default function AppliedJobs() {
                         </div>
                         <div className="flex flex-col gap-y-3 items-center mt-4 lg:mt-0">
                             <p className="text-sm sm:text-base">Posted {moment(jobData.date).fromNow()}</p>
-                            <Button className="cursor-pointer">Apply Now</Button>
+                            <Button className="cursor-pointer" onClick={applyHandler}>
+                                {isAllreadyApplied ? "Allready Applied" : "Apply Now"}
+                            </Button>
                         </div>
                     </div>
 
@@ -99,7 +162,9 @@ export default function AppliedJobs() {
                                 Job Description
                             </h2>
                             <div className="description-container" dangerouslySetInnerHTML={{ __html: jobData.description }} />
-                            <Button className="cursor-pointer px-10 py-6 text-base mt-4">Apply Now</Button>
+                            <Button className="cursor-pointer px-10 py-6 text-base mt-4" onClick={applyHandler}>
+                                {isAllreadyApplied ? "Allready Applied" : "Apply Now"}
+                            </Button>
                         </div>
 
                         <div className="w-full lg:w-[30%]">
@@ -133,7 +198,9 @@ export default function AppliedJobs() {
                                             dangerouslySetInnerHTML={{ __html: job.description.slice(0, 200) }}
                                         />
                                         <div className="flex flex-wrap gap-2 justify-between items-center mt-3">
-                                            <Button onClick={() => navigate(`/applied-jobs/${job._id}`)} className="cursor-pointer">
+                                            <Button
+                                                onClick={() => navigate(`/applied-jobs/${job._id}`)}
+                                                className="cursor-pointer">
                                                 Apply Now
                                             </Button>
                                             <Button

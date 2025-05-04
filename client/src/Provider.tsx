@@ -4,6 +4,7 @@ import { jobsData } from "./constants/index";
 import { Toaster } from "./components/ui/sonner";
 import axios from "axios";
 import { toast } from "sonner";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 export default function Provider({ children }: { children: React.ReactNode }) {
 
@@ -16,13 +17,36 @@ export default function Provider({ children }: { children: React.ReactNode }) {
   });
   const [companyToken, setCompanyToken] = useState<null | any>();
   const [companyData, setCompanyData] = useState<null | any>()
+  const [userData, setUserData] = useState<null | any>()
+  const [userApplications, setUserApplications] = useState<string[]>([])
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL!
 
-  const fetchJobsData = () => {
-    setIsJobs(jobsData)
-  }
+  const { user } = useUser()
+  const { getToken } = useAuth()
 
+
+  const fetchJobsData = async () => {
+    try {
+
+      const { data } = await axios.get(backendUrl + "/jobs", {
+        headers: {
+          Token: `${companyToken}`
+        }
+      })
+
+      if (data.success) {
+        setIsJobs(data.jobs)
+        toast.success(data.message)
+        console.log(data)
+      } else {
+        toast.error(data.message)
+      }
+
+    } catch (error: any) {
+      toast.error(error)
+    }
+  }
 
   const fetchCompanyData = async () => {
     try {
@@ -42,6 +66,48 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const fetchUserData = async () => {
+    try {
+
+      const token = await getToken()
+
+      const { data } = await axios.get(backendUrl + "/users/userData", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      })
+
+      if (data.success) {
+        setUserData(data.user)
+        toast.success(data.message)
+        console.log(data)
+      }
+    } catch (error: any) {
+      toast.error(error)
+    }
+  }
+
+  const fetchUserJobApplicationsData = async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.get(backendUrl + "/users/applications", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      if (data.success) {
+        setUserApplications(data.jobApplications);
+        toast.success(data.message);
+        console.log("Application data:", data.jobApplications);
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Something went wrong");
+      console.log(error);
+    }
+  };
+
+
 
   useEffect(() => {
     fetchJobsData()
@@ -57,6 +123,16 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     }
   }, [companyToken])
 
+  useEffect(() => {
+    if (user) {
+      fetchUserData()
+      fetchUserJobApplicationsData()
+    }
+  }, [user])
+
+
+
+
   const AppContextProviderValues = {
     isSearchedFilter,
     setIsSearchedFilter,
@@ -70,7 +146,15 @@ export default function Provider({ children }: { children: React.ReactNode }) {
     setCompanyData,
     companyToken,
     setCompanyToken,
-    backendUrl
+    backendUrl,
+    userData,
+    setUserData,
+    userApplications,
+    setUserApplications,
+    fetchJobsData,
+    fetchUserData,
+    fetchCompanyData,
+    fetchUserJobApplicationsData
   };
 
   return (
