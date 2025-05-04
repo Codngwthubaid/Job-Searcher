@@ -9,6 +9,11 @@ interface AppContextType {
   setIsJobs: (jobs: any[]) => void;
   isShowRecruiterForm: boolean;
   setIsShowRecruiterForm: (value: boolean) => void;
+  backendUrl: any;
+  companyToken: any;
+  setCompanyToken: (token: any) => void;
+  companyData: any;
+  setCompanyData: (data: any) => void;
 }
 
-export const AppContextProvider = createContext<AppContextType | undefined>(undefined);
+export const AppContext = createContext<AppContextType | undefined>(undefined);

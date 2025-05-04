@@ -18,6 +18,9 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import axios from "axios";
+import { useAppContext } from "@/Provider";
+import { toast, Toaster } from "sonner";
 
 type JobFormValues = {
     title: string;
@@ -29,6 +32,9 @@ type JobFormValues = {
 };
 
 export default function AddJobs() {
+
+    const { backendUrl, companyToken } = useAppContext()
+
     const form = useForm<JobFormValues>({
         mode: "onChange",
         defaultValues: {
@@ -45,6 +51,32 @@ export default function AddJobs() {
 
     const onSubmit = async (data: JobFormValues) => {
         setIsSubmitting(true);
+
+        try {
+
+            const response = await axios.post(backendUrl + "/company/postJob", {
+                title: data.title,
+                location: data.location,
+                category: data.category,
+                level: data.level,
+                salary: data.salary,
+                description: data.description
+            },
+                {
+                    headers: {
+                        Token: `${companyToken}`
+                    }
+                }
+            );
+            if (response.data.success) {
+                toast.success(response.data.message)
+            }
+
+        } catch (error: any) {
+            toast.error(error)
+        }
+
+
 
         setTimeout(() => {
             console.log("Submitted Job:", data);

@@ -7,8 +7,12 @@ import ViewApplications from "./pages/view-applications";
 import ManageJobs from "./pages/manage-jobs";
 import AddJobs from "./pages/add-jobs";
 import "quill/dist/quill.snow.css";
+import { useAppContext } from "./Provider";
 
 export default function App() {
+
+  const { companyToken } = useAppContext()
+
 
   return (
     <div>
@@ -17,9 +21,15 @@ export default function App() {
         <Route path="/applied-jobs/:id" element={<AppliedJobs />} />
         <Route path={"/applications"} element={<Applications />} />
         <Route path={"/dashboard"} element={<RecruiterDashboard />}>
-          <Route path={"add-job"} element={<AddJobs />} />
-          <Route path={"manage-job"} element={<ManageJobs />} />
-          <Route path={"view-applications"} element={<ViewApplications />} />
+          {
+            companyToken && (
+              <>
+                <Route path={"view-applications"} element={<ViewApplications />} />
+                <Route path={"manage-job"} element={<ManageJobs />} />
+                <Route path={"add-job"} element={<AddJobs />} />
+              </>
+            )
+          }
         </Route>
       </Routes>
     </div>

@@ -4,22 +4,6 @@ import { User } from "../models/user.model.js";
 import { v2 as cloudinary } from "cloudinary"
 
 
-// export const getUserData = async (req, res) => {
-
-//     try {
-//         const userId = req.auth.userId
-//         console.log(userId)
-//         const user = await User.findById(userId)
-//         if (!user) return res.json({ success: false, message: "User not found" })
-//         res.json({ success: true, message: "Successfully fetched user data", user })
-
-//     } catch (error) {
-//         console.log(error)
-//         res.json({ success: false, message: error.message })
-//     }
-
-// }
-
 export const getUserData = async (req, res) => {
     try {
         console.log("Auth object:", req.auth);

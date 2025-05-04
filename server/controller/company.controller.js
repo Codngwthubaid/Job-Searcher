@@ -3,6 +3,7 @@ import { v2 as cloudinary } from "cloudinary"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../lib/generateToken.js"
 import { Job } from "../models/job.model.js"
+import { JobApplication } from "../models/jobApplications.model.js"
 
 export const registerCompany = async (req, res) => {
     try {
@@ -59,7 +60,7 @@ export const loginCompany = async (req, res) => {
 
         const company = await Company.findOne({ email })
 
-        if (bcrypt.compare(password, company.password)) {
+        if (await bcrypt.compare(password, company.password)) {
             res.status(200).json({
                 message: "Company logged in successfully",
                 success: true,
@@ -132,9 +133,15 @@ export const getCompanyPostedJobsData = async (req, res) => {
     try {
         const company = req.company._id
         // also get no of applicants
-        const jobs = await Job.find({ companyId: company }).populate({ path: "companyId", select: "-password" })
+        const jobs = await Job.find({ companyId: company })
+
+        const jobsData = await Promise.all(jobs.map(async (job) => {
+            const applications = await JobApplication.find({ _id: job._id })
+            return { ...job.toObject(), applications: applications.length }
+        }))
+
         if (!jobs) { return res.json({ success: false, message: "No jobs found" }) }
-        res.json({ success: true, message: "Successfully fetched company posted jobs", jobs })
+        res.json({ success: true, message: "Successfully fetched company posted jobs", jobsData })
 
     } catch (error) {
         console.log(error)
@@ -163,7 +170,6 @@ export const changeAvailabilityOfPostedJob = async (req, res) => {
         res.json({ success: false, message: error.message })
 
     }
-
 }
 
 

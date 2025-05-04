@@ -25,8 +25,6 @@ app.use("/api/jobs", jobsRoutes)
 app.use("/api/users", userRoutes)
 
 
-
-
 const PORT = process.env.PORT || 5000
 await ConnectDB()
 await connectCloudinary()
