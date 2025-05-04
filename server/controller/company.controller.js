@@ -2,6 +2,7 @@ import { Company } from "../models/company.model.js"
 import { v2 as cloudinary } from "cloudinary"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../lib/generateToken.js"
+import { Job } from "../models/job.model.js"
 
 export const registerCompany = async (req, res) => {
     try {
@@ -79,15 +80,117 @@ export const loginCompany = async (req, res) => {
     }
 }
 
-export const getCompanyData = async (req, res) => { }
+export const postJobsData = async (req, res) => {
 
-export const postJobsData = async (req, res) => { }
+    try {
 
+        const { title, description, location, salary, level, category, date, available } = req.body
+        const companyId = req.company._id
+        console.log(companyId)
+
+        const newJob = new Job({
+            title,
+            description,
+            location,
+            salary,
+            companyId,
+            date: Date.now(),
+            level,
+            category,
+            available
+        })
+
+        await newJob.save()
+        res.json({ success: true, message: "Successfully added a new job", newJob })
+
+    }
+    catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+
+
+}
+
+export const getCompanyData = async (req, res) => {
+
+    try {
+
+        const company = req.company
+        if (!company) { return res.json({ success: false, message: "Company not found" }) }
+        res.json({ success: true, message: "Successfully fetched company data", company })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+
+}
+
+export const getCompanyPostedJobsData = async (req, res) => {
+
+    try {
+        const company = req.company._id
+        // also get no of applicants
+        const jobs = await Job.find({ companyId: company }).populate({ path: "companyId", select: "-password" })
+        if (!jobs) { return res.json({ success: false, message: "No jobs found" }) }
+        res.json({ success: true, message: "Successfully fetched company posted jobs", jobs })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+
+}
+
+export const changeAvailabilityOfPostedJob = async (req, res) => {
+
+    try {
+        const { id } = req.body
+        const companyId = req.company._id
+
+        const job = await Job.findById(id)
+        if (!job) return res.json({ success: false, message: "Job not found" })
+
+        if (job.companyId.toString() === companyId.toString()) {
+            job.available = !job.available
+            await job.save()
+            res.json({ success: true, message: "Successfully changed availability of job", job })
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+
+    }
+
+}
+
+
+// pending
 export const getCompanyJobApplicationsData = async (req, res) => { }
 
-export const getCompanyPostedJobsData = async (req, res) => { }
 
-export const changeJobApplicationStatus = async (req, res) => { }
+// issue + pending
+export const changeJobApplicationStatus = async (req, res) => {
+    try {
 
-export const changeAvailabilityOfPostedJob = async (req, res) => { }
+        const { id, userId } = req.body
+        const companyId = req.company._id
+
+        const job = await Job.findById(id)
+        if (!job) return res.json({ success: false, message: "Job not found" })
+
+        if (job.companyId.toString() === companyId.toString()) {
+            const application = job.applications.filter(application => application.user.toString() === userId)
+            application.status = !application.status
+            await job.save()
+            res.json({ success: true, message: "Successfully changed application status", job })
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
 

@@ -16,11 +16,12 @@ const router = Router()
 
 router.post("/register", upload.single("image"), registerCompany)
 router.post("/login", loginCompany)
-router.get("/company", protectionForCompany, getCompanyData)
-router.post("/post-job", protectionForCompany, postJobsData)
-router.get("/company-posted-jobs", protectionForCompany, getCompanyPostedJobsData)
-router.post("/change-job-application-status", protectionForCompany, changeJobApplicationStatus)
-router.post("/change-availability-of-posted-job", protectionForCompany, changeAvailabilityOfPostedJob)
+router.post("/postJob", protectionForCompany, postJobsData)
+router.get("/getCompanyData", protectionForCompany, getCompanyData)
+router.get("/getCompanyPostedJobs", protectionForCompany, getCompanyPostedJobsData)
+router.post("/getChangeAvailabilityOfPostedJob", protectionForCompany, changeAvailabilityOfPostedJob)
+
+router.post("/getChangeJobApplicationStatus", protectionForCompany, changeJobApplicationStatus)
 router.get("/company-job-applications", protectionForCompany, getCompanyJobApplicationsData)
 
 
