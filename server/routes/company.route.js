@@ -20,9 +20,8 @@ router.post("/postJob", protectionForCompany, postJobsData)
 router.get("/getCompanyData", protectionForCompany, getCompanyData)
 router.get("/getCompanyPostedJobs", protectionForCompany, getCompanyPostedJobsData)
 router.post("/getChangeAvailabilityOfPostedJob", protectionForCompany, changeAvailabilityOfPostedJob)
-
+router.get("/getCompanyJobApplications", protectionForCompany, getCompanyJobApplicationsData)
 router.post("/getChangeJobApplicationStatus", protectionForCompany, changeJobApplicationStatus)
-router.get("/company-job-applications", protectionForCompany, getCompanyJobApplicationsData)
 
 
 export default router

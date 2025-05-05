@@ -1,5 +1,4 @@
-import { useState, useRef } from "react";
-import logo from "@/assets/logo.gif";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -17,6 +16,9 @@ import { useAppContext } from "@/Provider"
 import { useAuth, useUser } from "@clerk/clerk-react"
 import { toast } from "sonner";
 import axios from "axios";
+import moment from "moment";
+import { Loader } from "lucide-react";
+import { Link } from "react-router-dom";
 
 
 export default function Applications() {
@@ -30,7 +32,7 @@ export default function Applications() {
     const { getToken } = useAuth()
 
     const { userData, backendUrl, userApplications, fetchUserData } = useAppContext()
-    console.log("User Applications:",userApplications)
+    console.log("User Applications:", userApplications)
 
     const updateResume = async () => {
         try {
@@ -55,7 +57,6 @@ export default function Applications() {
             toast.error(error)
         }
 
-        setResume(null);
         setIsSaved(false);
     }
 
@@ -99,92 +100,118 @@ export default function Applications() {
         setIsLoading(false);
     };
 
+    useEffect(() => {
+        setIsLoading(true);
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, []);
+
+
     return (
         <>
-            <Navbar />
             {isLoading ? (
-                <div className="flex flex-col justify-center items-center w-full h-[80vh]">
-                    <img src={logo} alt="logo-loading" className="w-20" />
-                    <p className="text-xl font-bold">Fetching data please wait ...</p>
+                <div className="flex justify-center items-center h-screen" >
+                    <Loader className="animate-spin text-blue-500 size-16" />
                 </div>
             ) : (
-                <div className="p-6">
-                    <h1 className="text-2xl font-bold mb-4">Upload Your Resume</h1>
+                <div>
+                    <Navbar />
+                    <div className="p-6">
+                        <h1 className="text-2xl font-bold mb-4">Upload Your Resume</h1>
 
-                    {!resume && (
-                        <div className="flex gap-x-3 items-center">
-                            <Label htmlFor="resumeUpload" className="text-sm font-medium">Upload File</Label>
-                            <Button onClick={triggerFileInput} variant="default" className="cursor-pointer">
-                                Choose File
-                            </Button>
-                        </div>
-                    )}
-
-                    {resume && (
-                        <div className="mt-4 flex flex-col gap-3">
-                            <p className="text-md font-medium text-gray-700">
-                                Selected File: <span className="text-blue-600">{resume.name}</span>
-                            </p>
-                            <div className="flex flex-wrap gap-3">
-                                <Button onClick={handleDownload} variant="default" className="cursor-pointer">
-                                    Download Resume
+                        {!resume && (
+                            <div className="flex gap-x-3 items-center">
+                                <Label htmlFor="resumeUpload" className="text-sm font-medium">Upload File</Label>
+                                <Button onClick={triggerFileInput} variant="default" className="cursor-pointer">
+                                    Choose File
                                 </Button>
-                                <Button onClick={triggerFileInput} variant="secondary" className="cursor-pointer">
-                                    Reselect
-                                </Button>
-                                <Button onClick={handleSave} variant="outline" className="cursor-pointer" disabled={isLoading}>
-                                    {isLoading ? "Saving..." : isSaved ? "Resume Saved ✅" : "Save Resume"}
-                                </Button>
-
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    <Input
-                        id="resumeUpload"
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        onChange={handleFileChange}
-                        ref={fileInputRef}
-                        className="hidden"
-                    />
+                        {resume && (
+                            <div className="mt-4 flex flex-col gap-3">
+                                <p className="text-md font-medium text-gray-700">
+                                    Selected File: <span className="text-blue-600">{resume.name}</span>
+                                </p>
+                                <div className="flex flex-wrap gap-3">
+                                    <Link to={userData?.resume}>
+                                        <Button
+                                            onClick={handleDownload}
+                                            variant="default" className="cursor-pointer"
+                                            disabled={!resume}
+                                        >
+                                            Download Resume
+                                        </Button>
+                                    </Link>
+                                    <Button onClick={triggerFileInput}
+                                        className="cursor-pointer"
+                                        variant="secondary">
+                                        Reselect
+                                    </Button>
+                                    {!isSaved ? (
+                                        <Button
+                                            className="cursor-pointer"
+                                            onClick={handleSave}
+                                            variant="outline" disabled={isLoading}>
+                                            {isLoading ? "Saving..." : "Save Resume"}
+                                        </Button>
+                                    ) : (
+                                        <Button disabled variant="outline" className="cursor-pointer text-green-600 border-green-400">
+                                            Resume Saved ✅
+                                        </Button>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
-                    <h2 className="text-2xl font-bold my-5">Applied Jobs</h2>
-                    <Table className="w-full border border-gray-200 rounded-md shadow-sm overflow-hidden">
-                        <TableHeader className="bg-blue-50">
-                            <TableRow className="">
-                                <TableHead className="w-[150px] text-gray-700 text-xl font-semibold px-4 py-3">Company</TableHead>
-                                <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3">Job Title</TableHead>
-                                <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3 max-sm:hidden">Location</TableHead>
-                                <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3 max-sm:hidden">Date</TableHead>
-                                <TableHead className="text-right text-gray-700 text-xl font-semibold px-4 py-3">Status</TableHead>
-                            </TableRow>
-                        </TableHeader>
 
-                        <TableBody>
-                            {userApplications.map((job: any, index: number) => (
-                                <TableRow
-                                    key={index}
-                                    className="hover:bg-blue-50 transition-colors duration-200"
-                                >
-                                    <TableCell className="px-4 py-3 font-medium text-gray-800">
-                                        <div className="flex items-center gap-x-2">
-                                            {job?.companyId?.image && <img src={job.companyId.image} alt={job.companyId.name} className="w-8 h-8 rounded-full" />}
-                                            {job?.companyId?.name && <p className="text-base font-bold">{job.companyId.name}</p>}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-700">{job?.jobId?.title}</TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job?.jobId?.location}</TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job?.date}</TableCell>
-                                    <TableCell className={`px-4 py-3 text-right text-gray-700 ${job?.status === "Pending" ? "text-blue-600" : job?.status === "Rejected" ? "text-red-600" : job?.status === "Accepted" && "text-green-600"}`}>{job?.status}</TableCell>
+                        <Input
+                            id="resumeUpload"
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            onChange={handleFileChange}
+                            ref={fileInputRef}
+                            className="hidden"
+                        />
+
+                        <h2 className="text-2xl font-bold my-5">Applied Jobs</h2>
+                        <Table className="w-full border border-gray-200 rounded-md shadow-sm overflow-hidden">
+                            <TableHeader className="bg-blue-50">
+                                <TableRow className="">
+                                    <TableHead className="w-[150px] text-gray-700 text-xl font-semibold px-4 py-3">Company</TableHead>
+                                    <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3">Job Title</TableHead>
+                                    <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3 max-sm:hidden">Location</TableHead>
+                                    <TableHead className="text-gray-700 text-xl font-semibold px-4 py-3 max-sm:hidden">Date</TableHead>
+                                    <TableHead className="text-right text-gray-700 text-xl font-semibold px-4 py-3">Status</TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
 
+                            <TableBody>
+                                {userApplications.map((job: any, index: number) => (
+                                    <TableRow
+                                        key={index}
+                                        className="hover:bg-blue-50 transition-colors duration-200"
+                                    >
+                                        <TableCell className="px-4 py-3 font-medium text-gray-800">
+                                            <div className="flex items-center gap-x-2">
+                                                {job?.companyId?.image && <img src={job.companyId.image} alt={job.companyId.name} className="w-8 h-8 rounded-full" />}
+                                                {job?.companyId?.name && <p className="text-base font-bold">{job.companyId.name}</p>}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="px-4 py-3 text-gray-700">{job?.jobId?.title}</TableCell>
+                                        <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{job?.jobId?.location}</TableCell>
+                                        <TableCell className="px-4 py-3 text-gray-700 max-sm:hidden">{moment(job?.date).format("DD-MM-YYYY")}</TableCell>
+                                        <TableCell className={`px-4 py-3 text-right text-gray-700 ${job?.status === "Pending" ? "text-blue-600" : job?.status === "Rejected" ? "text-red-600" : job?.status === "Accepted" && "text-green-600"}`}>{job?.status}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                    <Footer />
                 </div>
             )}
-            <Footer />
         </>
     );
 }

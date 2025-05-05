@@ -87,7 +87,7 @@ export default function Navbar() {
                                     <p className="text-lg">
                                         Hi, {user.firstName + " " + user.lastName}
                                     </p>
-                                    <Link to="/applied-jobs">
+                                    <Link to="/applications">
                                         <Button className="w-full cursor-pointer">
                                             Applied Jobs
                                         </Button>

@@ -16,10 +16,11 @@ import { useAppContext } from "@/Provider"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { toast } from "sonner"
+import { Loader } from "lucide-react"
 
 export default function ManageJobs() {
 
-    const { backendUrl, companyToken} = useAppContext()
+    const { backendUrl, companyToken } = useAppContext()
 
 
     interface Job {
@@ -32,9 +33,11 @@ export default function ManageJobs() {
     }
 
     const [isJobs, setIsJobs] = useState<Job[]>([])
-
+    const [loading, setLoading] = useState<boolean>(false)
+    console.log(" isJobs:", isJobs)
 
     const fetchJobsData = async () => {
+        setLoading(true)
         try {
             const { data } = await axios.get(backendUrl + "/company/getCompanyPostedJobs", {
                 headers: {
@@ -44,13 +47,14 @@ export default function ManageJobs() {
             if (data.success) {
                 setIsJobs(data.jobsData.reverse())
                 toast.success(data.message)
-                console.log(data.jobsData)
             } else {
                 toast.error(data.message)
             }
         } catch (error: any) {
             console.log(error)
             toast.error(error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -79,50 +83,60 @@ export default function ManageJobs() {
         }
     }
 
-
     useEffect(() => {
         fetchJobsData()
     }, [])
 
     return (
-        <div className="w-full">
-            <h2 className="text-2xl font-semibold mb-6">Manage Jobs</h2>
-            <Table>
-                <TableCaption>A list of your recent jobs.</TableCaption>
-                <ScrollArea className="h-[calc(100vh-300px)]">
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>#</TableHead>
-                            <TableHead>Job Title</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Location</TableHead>
-                            <TableHead>Vacancy</TableHead>
-                            <TableHead>Available</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {
-                            isJobs.map((item, index) => (
-                                <TableRow key={index}>
-                                    <TableCell className="font-medium">{index + 1}</TableCell>
-                                    <TableCell className="font-medium flex items-center gap-x-2">{item.title}</TableCell>
-                                    <TableCell>{item.date}</TableCell>
-                                    <TableCell>{item.location}</TableCell>
-                                    <TableCell>{item.applications}</TableCell>
-                                    <TableCell>
-                                        <Checkbox onClick={() => onToggleStatus(item._id)} className="cursor-pointer" checked={item.available} />
-                                    </TableCell>
-                                </TableRow>
-                            ))
-                        }
-                    </TableBody>
-                </ScrollArea>
-            </Table>
-            <div className="flex justify-end mt-6">
-                <Link to="/dashboard/add-job">
-                    <Button className="cursor-pointer bg-blue-500" onClick={fetchJobsData}>Add Job</Button>
-                </Link>
+
+        loading ? (
+            <div className="flex justify-center items-center h-full" >
+                <Loader className="animate-spin text-blue-500 size-16" />
             </div>
-        </div>
+        ) : (
+            <div className="w-full">
+                <h2 className="text-2xl font-semibold mb-6">Manage Jobs</h2>
+                <Table>
+                    <TableCaption>A list of your recent jobs.</TableCaption>
+                    <ScrollArea className="h-[calc(100vh-300px)]">
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>#</TableHead>
+                                <TableHead>Job Title</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Location</TableHead>
+                                <TableHead>Applicants</TableHead>
+                                <TableHead>Available</TableHead>
+                            </TableRow>
+                        </TableHeader>
+
+                        <TableBody>
+                            {
+                                isJobs.map((item, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell className="font-medium">{index + 1}</TableCell>
+                                        <TableCell className="font-medium flex items-center gap-x-2">{item.title}</TableCell>
+                                        <TableCell>{item.date}</TableCell>
+                                        <TableCell>{item.location}</TableCell>
+                                        <TableCell>{item.applications}</TableCell>
+                                        <TableCell>
+                                            <Checkbox onClick={() => onToggleStatus(item._id)} className="cursor-pointer" checked={item.available} />
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            }
+                        </TableBody>
+
+
+                    </ScrollArea>
+                </Table>
+                <div className="flex justify-end mt-6">
+                    <Link to="/dashboard/add-job">
+                        <Button className="cursor-pointer bg-blue-500" onClick={fetchJobsData}>Add Job</Button>
+                    </Link>
+                </div>
+            </div>
+        )
+
     )
 }

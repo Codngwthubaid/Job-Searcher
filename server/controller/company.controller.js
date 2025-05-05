@@ -132,11 +132,10 @@ export const getCompanyPostedJobsData = async (req, res) => {
 
     try {
         const company = req.company._id
-        // also get no of applicants
         const jobs = await Job.find({ companyId: company })
 
         const jobsData = await Promise.all(jobs.map(async (job) => {
-            const applications = await JobApplication.find({ _id: job._id })
+            const applications = await JobApplication.find({ jobId: job._id })
             return { ...job.toObject(), applications: applications.length }
         }))
 
@@ -173,30 +172,40 @@ export const changeAvailabilityOfPostedJob = async (req, res) => {
 }
 
 
-// pending
-export const getCompanyJobApplicationsData = async (req, res) => { }
+export const getCompanyJobApplicationsData = async (req, res) => {
 
-
-// issue + pending
-export const changeJobApplicationStatus = async (req, res) => {
     try {
 
-        const { id, userId } = req.body
         const companyId = req.company._id
+        const applications = await JobApplication.find({ companyId })
+            .populate("userId", "name image resume")
+            .populate("jobId", "title location category level salary")
+            .populate("companyId", "email name image")
+            .exec()
 
-        const job = await Job.findById(id)
-        if (!job) return res.json({ success: false, message: "Job not found" })
-
-        if (job.companyId.toString() === companyId.toString()) {
-            const application = job.applications.filter(application => application.user.toString() === userId)
-            application.status = !application.status
-            await job.save()
-            res.json({ success: true, message: "Successfully changed application status", job })
-        }
+        res.json({ success: true, message: "Successfully fetched company job applications", applications })
 
     } catch (error) {
         console.log(error)
         res.json({ success: false, message: error.message })
     }
+
+}
+
+
+
+export const changeJobApplicationStatus = async (req, res) => {
+    try {
+
+        const { id, status } = req.body
+        const applicationStatus = await JobApplication.findByIdAndUpdate(id, { status })
+        res.json({ success: true, message: "Successfully changed job application status", applicationStatus })
+
+    }
+    catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+
 }
 
