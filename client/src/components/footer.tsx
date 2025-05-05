@@ -1,5 +1,3 @@
-import { AuroraText } from "./magicui/aurora-text";
-
 const footerLinks = [
     {
         title: "Categories",
@@ -32,7 +30,7 @@ export default function Footer() {
         <footer className="bg-white border-t shadow mt-10 px-6 py-10">
             <div className="w-full flex flex-col md:flex-row justify-between items-start gap-8">
                 <div className="flex-1">
-                    <AuroraText className="text-4xl font-bold mb-3">Job Searcher</AuroraText>
+                    <div className="text-4xl font-bold mb-3">Job Searcher</div>
                     <p className="text-sm text-gray-600">
                         Find your dream job from top companies around the globe.
                     </p>

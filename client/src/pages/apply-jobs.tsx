@@ -1,7 +1,6 @@
 import { useAppContext } from "@/Provider";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import logo from "@/assets/logo.gif";
 import { Button } from "@/components/ui/button";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +37,6 @@ export default function AppliedJobs() {
     const [jobData, setJobData] = useState<JobData | null>(null);
     const [isAllreadyApplied, setIsAllreadyApplied] = useState(false);
     const { isJobs, backendUrl, userData, userApplications, fetchUserJobApplicationsData } = useAppContext();
-    console.log("User Applications:", userApplications)
 
     const fetchJobDataById = async () => {
         try {
@@ -47,7 +45,6 @@ export default function AppliedJobs() {
             if (data.success) {
                 setJobData(data.job)
                 toast.success(data.message)
-                console.log(data)
             }
             else {
                 toast.error(data.message)
@@ -59,7 +56,6 @@ export default function AppliedJobs() {
             toast.error(error.message)
         }
     }
-
 
     const applyHandler = async () => {
         try {
@@ -102,8 +98,6 @@ export default function AppliedJobs() {
     useEffect(() => {
         isAlreadyApplied()
     }, [userApplications, jobData])
-
-
 
     useEffect(() => {
         fetchJobDataById()

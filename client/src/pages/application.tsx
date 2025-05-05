@@ -28,11 +28,9 @@ export default function Applications() {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
 
-    const { user } = useUser()
     const { getToken } = useAuth()
 
     const { userData, backendUrl, userApplications, fetchUserData } = useAppContext()
-    console.log("User Applications:", userApplications)
 
     const updateResume = async () => {
         try {

@@ -88,10 +88,10 @@ export default function AddJobs() {
                 <Loader className="animate-spin text-blue-500 size-16" />
             </div>
         ) : (
-            <div className="w-full">
+            <div className="w-full overflow-y-auto h-full">
                 <h2 className="text-2xl font-semibold mb-6">Post a New Job</h2>
 
-                <Form {...form}>
+                {/* <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                         <FormField
                             control={form.control}
@@ -220,13 +220,160 @@ export default function AddJobs() {
 
                         <Button
                             type="submit"
-                            className="w-full"
+                            className="w-full cursor-pointer bg-blue-500 hover:bg-blue-600"
+                            disabled={!form.formState.isValid || isSubmitting}
+                        >
+                            {isSubmitting ? "Submitting..." : "Post Job"}
+                        </Button>
+                    </form>
+                </Form> */}
+
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                        {/* Job Title */}
+                        <FormField
+                            control={form.control}
+                            name="title"
+                            rules={{ required: "Job title is required" }}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Job Title</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g. Frontend Developer" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Job Description */}
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            rules={{ required: "Description is required" }}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Job Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Write the job description here..."
+                                            className="min-h-[120px]"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Responsive Group of Selects */}
+                        <div className="flex flex-col gap-6 md:flex-row md:gap-4">
+                            {/* Location */}
+                            <FormField
+                                control={form.control}
+                                name="location"
+                                rules={{ required: "Location is required" }}
+                                render={({ field }) => (
+                                    <FormItem className="w-full">
+                                        <FormLabel>Location</FormLabel>
+                                        <FormControl>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a location" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="Bangalore">Bangalore</SelectItem>
+                                                    <SelectItem value="Mumbai">Mumbai</SelectItem>
+                                                    <SelectItem value="Delhi">Delhi</SelectItem>
+                                                    <SelectItem value="Hyderabad">Hyderabad</SelectItem>
+                                                    <SelectItem value="Remote">Remote</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Category */}
+                            <FormField
+                                control={form.control}
+                                name="category"
+                                rules={{ required: "Category is required" }}
+                                render={({ field }) => (
+                                    <FormItem className="w-full">
+                                        <FormLabel>Job Category</FormLabel>
+                                        <FormControl>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a category" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="Software Engineer">Software Engineer</SelectItem>
+                                                    <SelectItem value="Marketing">Marketing</SelectItem>
+                                                    <SelectItem value="Sales">Sales</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Level */}
+                            <FormField
+                                control={form.control}
+                                name="level"
+                                rules={{ required: "Level is required" }}
+                                render={({ field }) => (
+                                    <FormItem className="w-full">
+                                        <FormLabel>Job Level</FormLabel>
+                                        <FormControl>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a level" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="Intern">Intern</SelectItem>
+                                                    <SelectItem value="Junior">Junior</SelectItem>
+                                                    <SelectItem value="Senior">Senior</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        {/* Salary */}
+                        <FormField
+                            control={form.control}
+                            name="salary"
+                            rules={{ required: "Salary is required" }}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Salary (Monthly in ₹)</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" placeholder="e.g. 60000" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Submit Button */}
+                        <Button
+                            type="submit"
+                            className="w-full cursor-pointer bg-blue-500 hover:bg-blue-600"
                             disabled={!form.formState.isValid || isSubmitting}
                         >
                             {isSubmitting ? "Submitting..." : "Post Job"}
                         </Button>
                     </form>
                 </Form>
+
+
             </div>
         )
     )

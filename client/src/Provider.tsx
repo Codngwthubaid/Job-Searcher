@@ -38,7 +38,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       if (data.success) {
         setIsJobs(data.jobs)
         toast.success(data.message)
-        console.log(data)
       } else {
         toast.error(data.message)
       }
@@ -59,7 +58,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       if (data.success) {
         setCompanyData(data.company)
         toast.success(data.message)
-        console.log(data)
       }
     } catch (error: any) {
       toast.error(error)
@@ -80,7 +78,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       if (data.success) {
         setUserData(data.user)
         toast.success(data.message)
-        console.log(data)
       }
     } catch (error: any) {
       toast.error(error)
@@ -99,14 +96,12 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       if (data.success) {
         setUserApplications(data.jobApplications);
         toast.success(data.message);
-        console.log("Application data:", data.jobApplications);
       }
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");
       console.log(error);
     }
   };
-
 
 
   useEffect(() => {

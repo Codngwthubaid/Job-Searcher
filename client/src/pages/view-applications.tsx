@@ -26,7 +26,6 @@ export default function ViewApplications() {
     const [applications, setApplications] = useState<{ jobId?: { title: string; location: string }; userId?: { name: string; image: string } }[]>([])
     const [loading, setLoading] = useState<boolean>(false)
     const { backendUrl, companyToken } = useAppContext()
-    console.log("applications:", applications)
 
     const fetchApplications = async () => {
         setLoading(true);
@@ -39,7 +38,6 @@ export default function ViewApplications() {
             if (data.success) {
                 setApplications(data.applications)
                 toast.success(data.message)
-                console.log(data.applications)
             } else {
                 toast.error(data.message)
             }
@@ -82,9 +80,9 @@ export default function ViewApplications() {
         ) : (
             <div className="w-full">
                 <h2 className="text-2xl font-semibold mb-6">View Applicants</h2>
-                <Table>
-                    <TableCaption>A list of your recent applications.</TableCaption>
-                    <ScrollArea className="h-[calc(100vh-200px)] max-h-[calc(100vh-200px)]]">
+                <ScrollArea className="h-[calc(100vh-250px)] w-full overflow-y-auto">
+                    <Table>
+                        <TableCaption>A list of your recent applications.</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>#</TableHead>
@@ -133,8 +131,8 @@ export default function ViewApplications() {
                                 ))
                             }
                         </TableBody>
-                    </ScrollArea>
-                </Table>
+                    </Table>
+                </ScrollArea>
             </div>
         )
     )

@@ -4,40 +4,11 @@ import { AuroraText } from "./magicui/aurora-text";
 import { LocationEditIcon, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { companies } from "@/constants/index";
+import { trustedCompaniesData } from "@/constants/index"
 import { useAppContext } from "@/Provider";
 import { useRef } from "react";
 
-const trustedCompaniesData = [
-    {
-        img: companies.amazon,
-        username: "Amazon",
-    },
-    {
-        img: companies.google,
-        username: "Google",
-    },
-    {
-        img: companies.microsoft,
-        username: "Microsoft",
-    },
-    {
-        img: companies.discord,
-        username: "Discord",
-    },
-    {
-        img: companies.stripe,
-        username: "Stripe",
-    },
-    {
-        img: companies.apple,
-        username: "Apple",
-    },
-    {
-        img: companies.walmart,
-        username: "Walmart",
-    },
-];
+
 
 const firstRow = trustedCompaniesData.slice(0, trustedCompaniesData.length / 2);
 

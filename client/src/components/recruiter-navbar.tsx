@@ -23,9 +23,6 @@ export default function RecruiterNavbar() {
     const [isloading, setIsLoading] = useState(false)
     const navigate = useNavigate()
     const { companyData, setCompanyToken } = useAppContext()
-    console.log(companyData)
-
-
 
     const Logout = async () => {
         setIsLoading(true);
@@ -50,7 +47,7 @@ export default function RecruiterNavbar() {
 
 
     return companyData && (
-        <div className="flex justify-between items-center mx-auto border shadow-md px-4">
+        <div className="flex justify-between items-center mx-auto border shadow-md px-4 w-full">
             <div className="flex gap-1 items-center" onClick={() => navigate("/")}>
                 <img src={logo} alt="logo" className="w-20" />
                 <div className="text-xl md:text-3xl font-bold">Job Searcher</div>
@@ -58,7 +55,7 @@ export default function RecruiterNavbar() {
             <div className="flex items-center gap-x-2">
                 <p>Welcome, {companyData.name}</p>
                 <Dialog>
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                         <Avatar className="border cursor-pointer">
                             <AvatarImage src={companyData.image} alt={companyData.name} />
                             <AvatarFallback>{companyData.name}</AvatarFallback>

@@ -47,7 +47,7 @@ export default function Navbar() {
                 ) : (
                     <div className="flex gap-3 items-center">
                         <Dialog>
-                            <DialogTrigger>
+                            <DialogTrigger asChild>
                                 <Button
                                     className="cursor-pointer"
                                     onClick={() => setIsShowRecruiterForm(true)}
@@ -99,7 +99,7 @@ export default function Navbar() {
                             ) : (
                                 <>
                                     <Dialog>
-                                        <DialogTrigger>
+                                        <DialogTrigger asChild>
                                             <Button
                                                 className="cursor-pointer"
                                                 onClick={() => setIsShowRecruiterForm(true)}

@@ -30,6 +30,37 @@ export const JobLocations = [
     "New York"
 ]
 
+export const trustedCompaniesData = [
+    {
+        img: companies.amazon,
+        username: "Amazon",
+    },
+    {
+        img: companies.google,
+        username: "Google",
+    },
+    {
+        img: companies.microsoft,
+        username: "Microsoft",
+    },
+    {
+        img: companies.discord,
+        username: "Discord",
+    },
+    {
+        img: companies.stripe,
+        username: "Stripe",
+    },
+    {
+        img: companies.apple,
+        username: "Apple",
+    },
+    {
+        img: companies.walmart,
+        username: "Walmart",
+    },
+];
+
 
 export const jobsData = [
     {
