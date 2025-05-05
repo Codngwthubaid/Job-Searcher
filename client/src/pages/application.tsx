@@ -13,7 +13,7 @@ import {
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import { useAppContext } from "@/Provider"
-import { useAuth, useUser } from "@clerk/clerk-react"
+import { useAuth } from "@clerk/clerk-react"
 import { toast } from "sonner";
 import axios from "axios";
 import moment from "moment";
