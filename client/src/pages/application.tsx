@@ -57,12 +57,15 @@ export default function Applications() {
 
         setIsSaved(false);
     }
-
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            const allowedTypes = ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+            if (!allowedTypes.includes(file.type)) {
+                toast.error("Invalid file type. Please upload a PDF, DOC, or DOCX file.");
+                return;
+            }
             setResume(file);
-            setIsSaved(false);
         }
     };
 

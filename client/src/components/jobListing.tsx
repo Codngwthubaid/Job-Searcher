@@ -175,17 +175,17 @@ export default function JobListing() {
                                         <div>
                                             <div className="flex items-center gap-x-3">
                                                 <img
-                                                    className="text-sm text-muted-foreground"
+                                                    className="rounded-full text-sm text-muted-foreground"
                                                     width="32"
                                                     height="32"
-                                                    alt=""
+                                                    alt={job.title}
                                                     src={job.companyId.image}
                                                 />
                                                 <h2 className="text-xl font-semibold">{job.title}</h2>
                                             </div>
                                             <div className="flex gap-2 w-full">
-                                                <p className="text-sm border p-1 font-medium text-muted-foreground">{job.location}</p>
-                                                <p className="text-sm border p-1 font-medium text-muted-foreground">{job.level}</p>
+                                                <p className="text-sm border p-1 font-medium text-muted-foreground rounded-lg mt-4">{job.location}</p>
+                                                <p className="text-sm border p-1 font-medium text-muted-foreground rounded-lg mt-4">{job.level}</p>
                                             </div>
                                         </div>
                                     </div>

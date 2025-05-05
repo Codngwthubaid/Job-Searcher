@@ -6,8 +6,24 @@ import stripe from "@/assets/stripe.png";
 import amazon from "@/assets/amazon.png";
 import walmart from "@/assets/walmart.png";
 
+
+export const marqueeText = [
+    { desc: "For getting better User Interface experience, open JOBSEARCH on your browser."},
+    { desc: "To enjoy an enhanced User Interface, please access JOBSEARCH through your web browser."},
+    { desc: "For the best User Interface experience, visit JOBSEARCH using your browser."},
+    { desc: "Access JOBSEARCH on your browser for a smoother and improved User Interface."},
+    { desc: "For optimal User Interface performance, open JOBSEARCH in your preferred browser."},
+    { desc: "Experience a superior User Interface by launching JOBSEARCH in your web browser."},
+];
+
 export const companies = {
-    apple, google, microsoft, discord, stripe, amazon, walmart
+    apple,
+    google,
+    microsoft,
+    discord,
+    stripe,
+    amazon,
+    walmart
 };
 
 export const JobCategories = [
@@ -28,6 +44,12 @@ export const JobLocations = [
     "California",
     "Chennai",
     "New York"
+]
+
+export const JobLevels = [
+    "Beginner Level",
+    "Intermediate Level",
+    "Senior Level",
 ]
 
 export const trustedCompaniesData = [
