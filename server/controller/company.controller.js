@@ -171,7 +171,6 @@ export const changeAvailabilityOfPostedJob = async (req, res) => {
     }
 }
 
-
 export const getCompanyJobApplicationsData = async (req, res) => {
 
     try {
@@ -191,8 +190,6 @@ export const getCompanyJobApplicationsData = async (req, res) => {
     }
 
 }
-
-
 
 export const changeJobApplicationStatus = async (req, res) => {
     try {
