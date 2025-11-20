@@ -1,5 +1,8 @@
+import dotenv from "dotenv"
 import { Webhook } from "svix";
 import { User } from "../models/user.model.js";
+
+dotenv.config()
 
 export const clerkWebhooks = async (req, res) => {
     try {

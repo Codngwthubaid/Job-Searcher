@@ -43,7 +43,8 @@ export default function Provider({ children }: { children: React.ReactNode }) {
       }
 
     } catch (error: any) {
-      toast.error(error)
+      toast.error(error.message);
+
     }
   }
 
@@ -60,7 +61,8 @@ export default function Provider({ children }: { children: React.ReactNode }) {
         toast.success(data.message)
       }
     } catch (error: any) {
-      toast.error(error)
+      toast.error(error.message);
+
     }
   }
 
@@ -80,7 +82,8 @@ export default function Provider({ children }: { children: React.ReactNode }) {
         toast.success(data.message)
       }
     } catch (error: any) {
-      toast.error(error)
+      toast.error(error.message);
+
     }
   }
 
